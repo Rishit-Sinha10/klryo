@@ -61,8 +61,17 @@ function CodeEditor({ activeFile, project, onContentChange, onOpenAI, runTrigger
   const [isFormatting, setIsFormatting] = useState(false);
   const editorRef = useRef(null);
   const stdinRef = useRef(null);
+  const contentRef = useRef("");
+  const languageRef = useRef("javascript");
+  const stdinRef2 = useRef("");
+  const findRef = useRef(null);
   const { toast } = useToast();
   const { getToken } = useAuth();
+
+  useEffect(() => { contentRef.current = editorContent; }, [editorContent]);
+  useEffect(() => { languageRef.current = language; }, [language]);
+  useEffect(() => { stdinRef2.current = stdinInput; }, [stdinInput]);
+  useEffect(() => { findRef.current = onFindInProject; }, [onFindInProject]);
 
   useEffect(() => { fetchLanguages().then(setLanguages); }, []);
 
