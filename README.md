@@ -1,3 +1,4 @@
+
 # ZecoAI
 > AI-powered code editor in your browser. Write, run, debug, and ship code across 80+ languages with AI assistance.
 ![License](https://img.shields.io/badge/license-ISC-blue)
@@ -97,6 +98,7 @@ npm run dev
 ## Project Structure
 ```
 ZecoAI/
+├── architecture-sketch.png
 ├── backend/
 │   ├── controller/
 │   │   ├── ai.controller.js           # AI code analysis/generation
