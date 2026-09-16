@@ -1,3 +1,4 @@
+
 # klyro
 
 > AI-powered code editor in your browser. Write, run, debug, and ship code across 80+ languages with AI assistance.
@@ -35,6 +36,7 @@ klyro is a full-stack web-based code editor that combines a VS Code-like editing
 | Lucide React 0.577   | Icons                     |
 | Axios 1.13           | HTTP client               |
 | Vercel Analytics 2.0 | Page analytics            |
+| Sentry 10.74         | Error tracking            |
 
 ### Backend
 
@@ -54,7 +56,6 @@ klyro is a full-stack web-based code editor that combines a VS Code-like editing
 - **Clerk** -- Authentication and user management
 
 ---
-
 ## Getting Started
 
 ### Prerequisites
