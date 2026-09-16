@@ -1,52 +1,61 @@
-import { useState, useRef } from "react"
-import { Send, Sparkles } from "lucide-react"
-import { Textarea } from "@/components/ui/textarea"
-import { Button } from "@/components/ui/button"
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
-import { AttachmentList } from "@/components/ui/attachment"
+import { useState, useRef } from "react";
+import { Send, Sparkles } from "lucide-react";
+import { Textarea } from "@/components/ui/textarea";
+import { Button } from "@/components/ui/button";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { AttachmentList } from "@/components/ui/attachment";
 
-function PromptInput({ onSubmit, isLoading, placeholder = "Ask ZecoAI...", onAttach }) {
-  const [input, setInput] = useState("")
-  const [attachments, setAttachments] = useState([])
-  const fileInputRef = useRef(null)
+function PromptInput({
+  onSubmit,
+  isLoading,
+  placeholder = "Ask klyro...",
+  onAttach,
+}) {
+  const [input, setInput] = useState("");
+  const [attachments, setAttachments] = useState([]);
+  const fileInputRef = useRef(null);
 
   const handleSubmit = (e) => {
-    e.preventDefault()
-    if (!input.trim() || isLoading) return
-    onSubmit(input, attachments.length ? attachments : undefined)
-    setInput("")
-    setAttachments([])
-  }
+    e.preventDefault();
+    if (!input.trim() || isLoading) return;
+    onSubmit(input, attachments.length ? attachments : undefined);
+    setInput("");
+    setAttachments([]);
+  };
 
   const handleKeyDown = (e) => {
     if (e.key === "Enter" && !e.shiftKey) {
-      e.preventDefault()
-      handleSubmit(e)
+      e.preventDefault();
+      handleSubmit(e);
     }
-  }
+  };
 
   const handleFileSelect = (e) => {
-    const files = Array.from(e.target.files || [])
+    const files = Array.from(e.target.files || []);
     const newAttachments = files.map((f) => ({
       name: f.name,
       size: f.size,
       type: f.type,
       file: f,
-    }))
-    setAttachments((prev) => [...prev, ...newAttachments])
-    if (fileInputRef.current) fileInputRef.current.value = ""
-  }
+    }));
+    setAttachments((prev) => [...prev, ...newAttachments]);
+    if (fileInputRef.current) fileInputRef.current.value = "";
+  };
 
   const removeAttachment = (index) => {
-    setAttachments((prev) => prev.filter((_, i) => i !== index))
-  }
+    setAttachments((prev) => prev.filter((_, i) => i !== index));
+  };
 
   const t = {
     bg3: "var(--bg-tertiary)",
     text: "var(--text-primary)",
     text3: "var(--text-tertiary)",
     border: "var(--border)",
-  }
+  };
 
   return (
     <div
@@ -78,7 +87,16 @@ function PromptInput({ onSubmit, isLoading, placeholder = "Ask ZecoAI...", onAtt
                     size="icon-sm"
                     onClick={() => fileInputRef.current?.click()}
                   >
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <svg
+                      width="16"
+                      height="16"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
                       <path d="m21.44 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l8.57-8.57A4 4 0 1 1 18 8.84l-8.59 8.57a2 2 0 0 1-2.83-2.83l8.49-8.48" />
                     </svg>
                   </Button>
@@ -99,7 +117,9 @@ function PromptInput({ onSubmit, isLoading, placeholder = "Ask ZecoAI...", onAtt
                   ) : (
                     <Sparkles size={16} />
                   )}
-                  <span className="hidden sm:inline">{isLoading ? "Thinking..." : "Ask AI"}</span>
+                  <span className="hidden sm:inline">
+                    {isLoading ? "Thinking..." : "Ask AI"}
+                  </span>
                 </Button>
               </TooltipTrigger>
               <TooltipContent>Send message (Enter)</TooltipContent>
@@ -119,7 +139,7 @@ function PromptInput({ onSubmit, isLoading, placeholder = "Ask ZecoAI...", onAtt
         onChange={handleFileSelect}
       />
     </div>
-  )
+  );
 }
 
-export default PromptInput
+export default PromptInput;

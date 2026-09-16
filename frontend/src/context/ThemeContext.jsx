@@ -15,21 +15,23 @@ const ACCENT_PRESETS = [
 
 function getInitialTheme() {
   try {
-    const saved = localStorage.getItem("zecoai-theme");
+    const saved = localStorage.getItem("klyro-theme");
     if (saved) {
       const parsed = JSON.parse(saved);
       if (parsed.mode === "light" || parsed.mode === "dark") return parsed.mode;
     }
   } catch {}
   if (typeof window !== "undefined" && window.matchMedia) {
-    return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+    return window.matchMedia("(prefers-color-scheme: dark)").matches
+      ? "dark"
+      : "light";
   }
   return "dark";
 }
 
 function getInitialAccent() {
   try {
-    const saved = localStorage.getItem("zecoai-theme");
+    const saved = localStorage.getItem("klyro-theme");
     if (saved) {
       const parsed = JSON.parse(saved);
       if (parsed.accent) return parsed.accent;
@@ -39,7 +41,7 @@ function getInitialAccent() {
 }
 
 function persistTheme(mode, accent) {
-  localStorage.setItem("zecoai-theme", JSON.stringify({ mode, accent }));
+  localStorage.setItem("klyro-theme", JSON.stringify({ mode, accent }));
 }
 
 function hexToHSL(hex) {
@@ -58,12 +60,22 @@ function hexToHSL(hex) {
     const d = max - min;
     s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
     switch (max) {
-      case r: h = ((g - b) / d + (g < b ? 6 : 0)) / 6; break;
-      case g: h = ((b - r) / d + 2) / 6; break;
-      case b: h = ((r - g) / d + 4) / 6; break;
+      case r:
+        h = ((g - b) / d + (g < b ? 6 : 0)) / 6;
+        break;
+      case g:
+        h = ((b - r) / d + 2) / 6;
+        break;
+      case b:
+        h = ((r - g) / d + 4) / 6;
+        break;
     }
   }
-  return { h: Math.round(h * 360), s: Math.round(s * 100), l: Math.round(l * 100) };
+  return {
+    h: Math.round(h * 360),
+    s: Math.round(s * 100),
+    l: Math.round(l * 100),
+  };
 }
 
 function generateAccentShades(hex) {
@@ -107,7 +119,7 @@ export function ThemeProvider({ children }) {
   useEffect(() => {
     const mq = window.matchMedia("(prefers-color-scheme: dark)");
     const handler = (e) => {
-      const saved = localStorage.getItem("zecoai-theme");
+      const saved = localStorage.getItem("klyro-theme");
       if (!saved) setMode(e.matches ? "dark" : "light");
     };
     mq.addEventListener("change", handler);

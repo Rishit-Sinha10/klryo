@@ -1,9 +1,9 @@
 {
-  "name": "zecoai-backend",
+  "name": "klyro-backend",
   "version": "1.0.0",
-  "description": "ZecoAI backend - AI-powered code editor API",
+  "description": "klyro backend - AI-powered code editor API",
   "license": "ISC",
-  "author": "ZecoAI",
+  "author": "klyro",
   "type": "module",
   "main": "index.js",
   "scripts": {

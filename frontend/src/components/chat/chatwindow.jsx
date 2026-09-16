@@ -1,14 +1,18 @@
-import { useState, useEffect, useRef } from "react"
-import { Plus, Trash2, MessageSquare, Brain, Loader2 } from "lucide-react"
-import Navbar from "../common/navbar"
-import MessageBubbleAI from "../ai/MessageBubble"
-import PromptInput from "../ai/PromptInput"
-import useAuth from "../../hooks/useAuth"
-import { Button } from "@/components/ui/button"
-import { Separator } from "@/components/ui/separator"
-import { Avatar, AvatarFallback } from "@/components/ui/avatar"
-import { Marker } from "@/components/ui/marker"
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
+import { useState, useEffect, useRef } from "react";
+import { Plus, Trash2, MessageSquare, Brain, Loader2 } from "lucide-react";
+import Navbar from "../common/navbar";
+import MessageBubbleAI from "../ai/MessageBubble";
+import PromptInput from "../ai/PromptInput";
+import useAuth from "../../hooks/useAuth";
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Marker } from "@/components/ui/marker";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 const API_BASE = `${import.meta.env.VITE_API_URL || "http://localhost:3000"}/api`;
 
@@ -38,7 +42,10 @@ function ChatWindow() {
     setLoadingChats(true);
     try {
       const token = await getToken();
-      if (!token) { setLoadingChats(false); return; }
+      if (!token) {
+        setLoadingChats(false);
+        return;
+      }
       const res = await fetch(`${API_BASE}/chats`, {
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -66,7 +73,10 @@ function ChatWindow() {
         const token = await getToken();
         const res = await fetch(`${API_BASE}/chats`, {
           method: "POST",
-          headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
           body: JSON.stringify({ messages: [] }),
         });
         if (res.ok) {
@@ -151,7 +161,9 @@ function ChatWindow() {
       });
 
       if (!res.ok) {
-        const error = await res.json().catch(() => ({ message: res.statusText }));
+        const error = await res
+          .json()
+          .catch(() => ({ message: res.statusText }));
         return `Error: ${error.message || "AI request failed"}`;
       }
 
@@ -195,7 +207,11 @@ function ChatWindow() {
 
     try {
       const aiResponse = await callAI(userInput);
-      const aiMsg = { role: "assistant", content: aiResponse, timestamp: new Date() };
+      const aiMsg = {
+        role: "assistant",
+        content: aiResponse,
+        timestamp: new Date(),
+      };
       setMessages((prev) => [...prev, aiMsg]);
 
       const updatedMessages = [...messages, userMsg, aiMsg];
@@ -205,12 +221,18 @@ function ChatWindow() {
           const token = await getToken();
           await fetch(`${API_BASE}/chats/${activeChat._id}/message`, {
             method: "PUT",
-            headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
             body: JSON.stringify({ role: "user", content: userInput }),
           });
           await fetch(`${API_BASE}/chats/${activeChat._id}/message`, {
             method: "PUT",
-            headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
             body: JSON.stringify({ role: "assistant", content: aiResponse }),
           });
         } catch (err) {
@@ -218,35 +240,70 @@ function ChatWindow() {
         }
       }
 
-      const updatedChat = { ...activeChat, messages: updatedMessages, title: activeChat.title === "New Chat" ? userInput.substring(0, 50) : activeChat.title };
+      const updatedChat = {
+        ...activeChat,
+        messages: updatedMessages,
+        title:
+          activeChat.title === "New Chat"
+            ? userInput.substring(0, 50)
+            : activeChat.title,
+      };
       setActiveChat(updatedChat);
-      setChats((prev) => prev.map((c) => c._id === activeChat._id ? updatedChat : c));
+      setChats((prev) =>
+        prev.map((c) => (c._id === activeChat._id ? updatedChat : c)),
+      );
 
       if (!isSignedIn) {
-        const allChats = chats.map((c) => c._id === activeChat._id ? updatedChat : c);
+        const allChats = chats.map((c) =>
+          c._id === activeChat._id ? updatedChat : c,
+        );
         localStorage.setItem("zeco_chats", JSON.stringify(allChats));
       }
     } catch (err) {
-      setMessages((prev) => [...prev, { role: "assistant", content: `Error: ${err.message}`, timestamp: new Date() }]);
+      setMessages((prev) => [
+        ...prev,
+        {
+          role: "assistant",
+          content: `Error: ${err.message}`,
+          timestamp: new Date(),
+        },
+      ]);
     } finally {
       setIsLoading(false);
     }
   };
 
   const t = {
-    bg: "var(--bg-primary)", bg2: "var(--bg-secondary)", bg3: "var(--bg-tertiary)",
-    text: "var(--text-primary)", text2: "var(--text-secondary)", text3: "var(--text-tertiary)",
-    border: "var(--border)", accent: "var(--accent)",
+    bg: "var(--bg-primary)",
+    bg2: "var(--bg-secondary)",
+    bg3: "var(--bg-tertiary)",
+    text: "var(--text-primary)",
+    text2: "var(--text-secondary)",
+    text3: "var(--text-tertiary)",
+    border: "var(--border)",
+    accent: "var(--accent)",
   };
 
   return (
-    <div className="h-screen w-screen flex flex-col" style={{ backgroundColor: t.bg }}>
+    <div
+      className="h-screen w-screen flex flex-col"
+      style={{ backgroundColor: t.bg }}
+    >
       <Navbar />
       <div className="flex-1 flex overflow-hidden pt-16">
         <div className="flex-1 flex overflow-hidden">
           {/* Chat list sidebar */}
-          <div className="w-64 flex flex-col shrink-0" style={{ borderRight: `1px solid ${t.border}`, backgroundColor: t.bg2 }}>
-            <div className="p-3" style={{ borderBottom: `1px solid ${t.border}` }}>
+          <div
+            className="w-64 flex flex-col shrink-0"
+            style={{
+              borderRight: `1px solid ${t.border}`,
+              backgroundColor: t.bg2,
+            }}
+          >
+            <div
+              className="p-3"
+              style={{ borderBottom: `1px solid ${t.border}` }}
+            >
               <Button onClick={createNewChat} className="w-full" size="sm">
                 <Plus size={16} />
                 New Chat
@@ -255,12 +312,22 @@ function ChatWindow() {
             <div className="flex-1 overflow-y-auto py-1">
               {loadingChats ? (
                 <div className="flex items-center justify-center py-8">
-                  <Loader2 size={16} className="animate-spin" style={{ color: t.text3 }} />
+                  <Loader2
+                    size={16}
+                    className="animate-spin"
+                    style={{ color: t.text3 }}
+                  />
                 </div>
               ) : chats.length === 0 ? (
                 <div className="px-4 py-8 text-center">
-                  <MessageSquare size={24} className="mx-auto mb-2" style={{ color: t.text3, opacity: 0.3 }} />
-                  <p className="text-xs" style={{ color: t.text3 }}>No chats yet</p>
+                  <MessageSquare
+                    size={24}
+                    className="mx-auto mb-2"
+                    style={{ color: t.text3, opacity: 0.3 }}
+                  />
+                  <p className="text-xs" style={{ color: t.text3 }}>
+                    No chats yet
+                  </p>
                 </div>
               ) : (
                 chats.map((chat) => (
@@ -269,14 +336,29 @@ function ChatWindow() {
                     onClick={() => selectChat(chat)}
                     className="flex items-center gap-2 px-3 py-2.5 mx-1 rounded-md cursor-pointer transition-colors group"
                     style={{
-                      backgroundColor: activeChat?._id === chat._id ? "var(--accent-light)" : "transparent",
-                      color: activeChat?._id === chat._id ? "var(--accent)" : "var(--text-secondary)",
+                      backgroundColor:
+                        activeChat?._id === chat._id
+                          ? "var(--accent-light)"
+                          : "transparent",
+                      color:
+                        activeChat?._id === chat._id
+                          ? "var(--accent)"
+                          : "var(--text-secondary)",
                     }}
-                    onMouseEnter={(e) => { if (activeChat?._id !== chat._id) e.currentTarget.style.backgroundColor = "var(--bg-tertiary)"; }}
-                    onMouseLeave={(e) => { if (activeChat?._id !== chat._id) e.currentTarget.style.backgroundColor = "transparent"; }}
+                    onMouseEnter={(e) => {
+                      if (activeChat?._id !== chat._id)
+                        e.currentTarget.style.backgroundColor =
+                          "var(--bg-tertiary)";
+                    }}
+                    onMouseLeave={(e) => {
+                      if (activeChat?._id !== chat._id)
+                        e.currentTarget.style.backgroundColor = "transparent";
+                    }}
                   >
                     <MessageSquare size={14} className="shrink-0" />
-                    <span className="text-sm truncate flex-1">{chat.title || "New Chat"}</span>
+                    <span className="text-sm truncate flex-1">
+                      {chat.title || "New Chat"}
+                    </span>
                     <Tooltip>
                       <TooltipTrigger asChild>
                         <Button
@@ -307,9 +389,15 @@ function ChatWindow() {
                     <Brain size={32} style={{ color: "#fbbf24" }} />
                   </AvatarFallback>
                 </Avatar>
-                <h2 className="text-2xl font-bold mb-2" style={{ color: t.text }}>ZecoAI Chat</h2>
+                <h2
+                  className="text-2xl font-bold mb-2"
+                  style={{ color: t.text }}
+                >
+                  klyro Chat
+                </h2>
                 <p className="text-sm mb-6 max-w-md" style={{ color: t.text3 }}>
-                  Ask questions, get code explanations, debug errors, or brainstorm ideas.
+                  Ask questions, get code explanations, debug errors, or
+                  brainstorm ideas.
                 </p>
                 <Button onClick={createNewChat} size="lg">
                   <Plus size={18} />
@@ -326,16 +414,28 @@ function ChatWindow() {
                           <Brain size={24} style={{ color: "#fbbf24" }} />
                         </AvatarFallback>
                       </Avatar>
-                      <p className="text-sm" style={{ color: t.text3 }}>Ask me anything about code...</p>
+                      <p className="text-sm" style={{ color: t.text3 }}>
+                        Ask me anything about code...
+                      </p>
                     </div>
                   ) : (
                     <>
                       {messages.map((msg, i) => (
-                        <MessageBubbleAI key={i} message={msg} isUser={msg.role === "user"} />
+                        <MessageBubbleAI
+                          key={i}
+                          message={msg}
+                          isUser={msg.role === "user"}
+                        />
                       ))}
                       {isLoading && (
                         <div className="flex justify-start mb-4">
-                          <div className="rounded-lg px-4 py-3" style={{ backgroundColor: t.bg3, border: `1px solid ${t.border}` }}>
+                          <div
+                            className="rounded-lg px-4 py-3"
+                            style={{
+                              backgroundColor: t.bg3,
+                              border: `1px solid ${t.border}`,
+                            }}
+                          >
                             <Marker variant="typing" />
                           </div>
                         </div>
@@ -345,7 +445,11 @@ function ChatWindow() {
                   )}
                 </div>
                 <Separator />
-                <PromptInput onSubmit={handleSubmitMessage} isLoading={isLoading} placeholder="Ask ZecoAI something..." />
+                <PromptInput
+                  onSubmit={handleSubmitMessage}
+                  isLoading={isLoading}
+                  placeholder="Ask klyro something..."
+                />
               </>
             )}
           </div>

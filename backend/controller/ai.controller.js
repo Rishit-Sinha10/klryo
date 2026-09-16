@@ -1,12 +1,14 @@
 import { z } from "zod";
 import { getAIProvider } from "../services/ai/index.js";
 
-const completionSchema = z.object({
-  code: z.string().max(50000).optional(),
-  language: z.string().max(50).optional(),
-  prefix: z.string().max(50000).optional(),
-  suffix: z.string().max(50000).optional(),
-}).refine((d) => d.code || d.prefix, { message: "Code or prefix is required" });
+const completionSchema = z
+  .object({
+    code: z.string().max(50000).optional(),
+    language: z.string().max(50).optional(),
+    prefix: z.string().max(50000).optional(),
+    suffix: z.string().max(50000).optional(),
+  })
+  .refine((d) => d.code || d.prefix, { message: "Code or prefix is required" });
 
 const generationSchema = z.object({
   specs: z.string().min(1, "Specifications are required").max(10000),
@@ -24,7 +26,9 @@ export const handleCompletion = async (req, res) => {
   try {
     const parsed = completionSchema.safeParse(req.body);
     if (!parsed.success) {
-      return res.status(400).json({ success: false, message: parsed.error.errors[0].message });
+      return res
+        .status(400)
+        .json({ success: false, message: parsed.error.errors[0].message });
     }
     const { code, language, prefix, suffix } = parsed.data;
     const provider = await getAIProvider();
@@ -49,12 +53,15 @@ RULES:
 - No markdown, no code fences, no explanations, no labels like "Completion:" — output raw code only.
 Insert at <CURSOR>:`;
 
-    let completion = await provider.chat(
-      [{ role: "user", content: prompt }],
-      { temperature: 0.1, maxTokens: 120 }
-    );
+    let completion = await provider.chat([{ role: "user", content: prompt }], {
+      temperature: 0.1,
+      maxTokens: 120,
+    });
     completion = completion.trim();
-    completion = completion.replace(/^```[\w]*\n?/gm, "").replace(/```$/gm, "").trim();
+    completion = completion
+      .replace(/^```[\w]*\n?/gm, "")
+      .replace(/```$/gm, "")
+      .trim();
 
     if (completion.length > 500) {
       completion = completion.substring(0, 500);
@@ -71,7 +78,9 @@ export const handleGeneration = async (req, res) => {
   try {
     const parsed = generationSchema.safeParse(req.body);
     if (!parsed.success) {
-      return res.status(400).json({ success: false, message: parsed.error.errors[0].message });
+      return res
+        .status(400)
+        .json({ success: false, message: parsed.error.errors[0].message });
     }
     const { specs, language, filename } = parsed.data;
     const provider = await getAIProvider();
@@ -96,7 +105,7 @@ CODE REQUIREMENTS:
 
     const generatedCode = await provider.chat(
       [{ role: "user", content: prompt }],
-      { temperature: 0.3, maxTokens: 2048 }
+      { temperature: 0.3, maxTokens: 2048 },
     );
 
     res.json({
@@ -115,7 +124,9 @@ export const handleDebug = async (req, res) => {
   try {
     const parsed = debugSchema.safeParse(req.body);
     if (!parsed.success) {
-      return res.status(400).json({ success: false, message: parsed.error.errors[0].message });
+      return res
+        .status(400)
+        .json({ success: false, message: parsed.error.errors[0].message });
     }
     const { code, language, error: runtimeError } = parsed.data;
     const provider = await getAIProvider();
@@ -159,10 +170,10 @@ CRITICAL JSON-SAFETY RULES for "fixedCode":
 
 If no errors are found, return "errors": [] and set "fixedCode" equal to the original code, unchanged.`;
 
-    const response = await provider.chat(
-      [{ role: "user", content: prompt }],
-      { temperature: 0.1, maxTokens: 4096 }
-    );
+    const response = await provider.chat([{ role: "user", content: prompt }], {
+      temperature: 0.1,
+      maxTokens: 4096,
+    });
 
     let analysis;
     try {
@@ -179,10 +190,15 @@ If no errors are found, return "errors": [] and set "fixedCode" equal to the ori
 };
 
 const streamChatSchema = z.object({
-  messages: z.array(z.object({
-    role: z.enum(["user", "assistant", "system"]),
-    content: z.string().max(50000),
-  })).min(1).max(100),
+  messages: z
+    .array(
+      z.object({
+        role: z.enum(["user", "assistant", "system"]),
+        content: z.string().max(50000),
+      }),
+    )
+    .min(1)
+    .max(100),
   projectContext: z.string().max(50000).optional(),
 });
 
@@ -190,14 +206,16 @@ export const handleStreamChat = async (req, res) => {
   try {
     const parsed = streamChatSchema.safeParse(req.body);
     if (!parsed.success) {
-      return res.status(400).json({ success: false, message: parsed.error.errors[0].message });
+      return res
+        .status(400)
+        .json({ success: false, message: parsed.error.errors[0].message });
     }
     const { messages, projectContext } = parsed.data;
     const provider = await getAIProvider();
 
     const systemMessage = {
       role: "system",
-      content: `You are ZecoAI, an expert AI coding assistant. You help users write, debug, review, and improve code. Be concise, accurate, and actionable. Use markdown code blocks when showing code. ${projectContext ? `\n\nProject context:\n${projectContext}` : ""}`,
+      content: `You are klyro, an expert AI coding assistant. You help users write, debug, review, and improve code. Be concise, accurate, and actionable. Use markdown code blocks when showing code. ${projectContext ? `\n\nProject context:\n${projectContext}` : ""}`,
     };
 
     const fullMessages = [systemMessage, ...messages];
@@ -209,7 +227,10 @@ export const handleStreamChat = async (req, res) => {
     res.flushHeaders();
 
     try {
-      for await (const chunk of provider.chatStream(fullMessages, { temperature: 0.7, maxTokens: 4096 })) {
+      for await (const chunk of provider.chatStream(fullMessages, {
+        temperature: 0.7,
+        maxTokens: 4096,
+      })) {
         res.write(`data: ${JSON.stringify({ chunk })}\n\n`);
       }
       res.write(`data: ${JSON.stringify({ done: true })}\n\n`);
@@ -226,4 +247,9 @@ export const handleStreamChat = async (req, res) => {
   }
 };
 
-export default { handleCompletion, handleGeneration, handleDebug, handleStreamChat };
+export default {
+  handleCompletion,
+  handleGeneration,
+  handleDebug,
+  handleStreamChat,
+};

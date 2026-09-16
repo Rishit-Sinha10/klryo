@@ -7,7 +7,9 @@ const isDbConnected = () => mongoose.connection.readyState === 1;
 export const createProject = async (req, res) => {
   try {
     if (!isDbConnected()) {
-      return res.status(503).json({ error: "Database not connected. Please try again later." });
+      return res
+        .status(503)
+        .json({ error: "Database not connected. Please try again later." });
     }
     const userId = req.auth.userId;
     const { name, description = "" } = req.body;
@@ -20,11 +22,13 @@ export const createProject = async (req, res) => {
       userId,
       name: name.trim(),
       description,
-      files: [{
-        name: "index.js",
-        content: `// ${name}\n// Welcome to ZecoAI\n\nfunction main() {\n  console.log('Hello from ${name}');\n}\n\nmain();`,
-        isMain: true,
-      }],
+      files: [
+        {
+          name: "index.js",
+          content: `// ${name}\n// Welcome to klyro\n\nfunction main() {\n  console.log('Hello from ${name}');\n}\n\nmain();`,
+          isMain: true,
+        },
+      ],
     });
 
     res.status(201).json(project);
@@ -37,7 +41,9 @@ export const createProject = async (req, res) => {
 export const getUserProjects = async (req, res) => {
   try {
     if (!isDbConnected()) {
-      return res.status(503).json({ error: "Database not connected. Please try again later." });
+      return res
+        .status(503)
+        .json({ error: "Database not connected. Please try again later." });
     }
     const userId = req.auth.userId;
     const page = Math.max(1, parseInt(req.query.page) || 1);
@@ -62,7 +68,9 @@ export const getUserProjects = async (req, res) => {
 export const getProjectById = async (req, res) => {
   try {
     if (!isDbConnected()) {
-      return res.status(503).json({ error: "Database not connected. Please try again later." });
+      return res
+        .status(503)
+        .json({ error: "Database not connected. Please try again later." });
     }
     const userId = req.auth.userId;
     const project = await Project.findOne({ _id: req.params.id, userId });
@@ -81,7 +89,9 @@ export const getProjectById = async (req, res) => {
 export const updateProject = async (req, res) => {
   try {
     if (!isDbConnected()) {
-      return res.status(503).json({ error: "Database not connected. Please try again later." });
+      return res
+        .status(503)
+        .json({ error: "Database not connected. Please try again later." });
     }
     const userId = req.auth.userId;
     const { name, description, files, mainFileId } = req.body;
@@ -97,7 +107,9 @@ export const updateProject = async (req, res) => {
       const existingIds = new Set(project.files.map((f) => f._id.toString()));
       const incomingIds = new Set(files.filter((f) => f._id).map((f) => f._id));
 
-      project.files = project.files.filter((f) => incomingIds.has(f._id.toString()));
+      project.files = project.files.filter((f) =>
+        incomingIds.has(f._id.toString()),
+      );
 
       for (const f of files) {
         if (f._id && existingIds.has(f._id)) {
@@ -108,7 +120,11 @@ export const updateProject = async (req, res) => {
             doc.isMain = f.isMain;
           }
         } else {
-          project.files.push({ name: f.name, content: f.content, isMain: f.isMain });
+          project.files.push({
+            name: f.name,
+            content: f.content,
+            isMain: f.isMain,
+          });
         }
       }
     }
@@ -129,10 +145,15 @@ export const updateProject = async (req, res) => {
 export const deleteProject = async (req, res) => {
   try {
     if (!isDbConnected()) {
-      return res.status(503).json({ error: "Database not connected. Please try again later." });
+      return res
+        .status(503)
+        .json({ error: "Database not connected. Please try again later." });
     }
     const userId = req.auth.userId;
-    const project = await Project.findOneAndDelete({ _id: req.params.id, userId });
+    const project = await Project.findOneAndDelete({
+      _id: req.params.id,
+      userId,
+    });
 
     if (!project) {
       return res.status(404).json({ error: "Project not found" });
@@ -148,7 +169,9 @@ export const deleteProject = async (req, res) => {
 export const exportProject = async (req, res) => {
   try {
     if (!isDbConnected()) {
-      return res.status(503).json({ error: "Database not connected. Please try again later." });
+      return res
+        .status(503)
+        .json({ error: "Database not connected. Please try again later." });
     }
     const userId = req.auth.userId;
     const projects = await Project.find({ userId }).sort({ updatedAt: -1 });
@@ -162,7 +185,9 @@ export const exportProject = async (req, res) => {
 export const importProjects = async (req, res) => {
   try {
     if (!isDbConnected()) {
-      return res.status(503).json({ error: "Database not connected. Please try again later." });
+      return res
+        .status(503)
+        .json({ error: "Database not connected. Please try again later." });
     }
     const userId = req.auth?.userId;
     if (!userId) {
@@ -200,7 +225,9 @@ export const importProjects = async (req, res) => {
 export const shareProject = async (req, res) => {
   try {
     if (!isDbConnected()) {
-      return res.status(503).json({ error: "Database not connected. Please try again later." });
+      return res
+        .status(503)
+        .json({ error: "Database not connected. Please try again later." });
     }
     const userId = req.auth.userId;
     const project = await Project.findOne({ _id: req.params.id, userId });
@@ -224,7 +251,9 @@ export const shareProject = async (req, res) => {
 export const unshareProject = async (req, res) => {
   try {
     if (!isDbConnected()) {
-      return res.status(503).json({ error: "Database not connected. Please try again later." });
+      return res
+        .status(503)
+        .json({ error: "Database not connected. Please try again later." });
     }
     const userId = req.auth.userId;
     const project = await Project.findOne({ _id: req.params.id, userId });
@@ -246,10 +275,14 @@ export const unshareProject = async (req, res) => {
 export const getSharedProject = async (req, res) => {
   try {
     if (!isDbConnected()) {
-      return res.status(503).json({ error: "Database not connected. Please try again later." });
+      return res
+        .status(503)
+        .json({ error: "Database not connected. Please try again later." });
     }
     const { shareId } = req.params;
-    const project = await Project.findOne({ shareId }).select("name description files shareId createdAt updatedAt");
+    const project = await Project.findOne({ shareId }).select(
+      "name description files shareId createdAt updatedAt",
+    );
 
     if (!project) {
       return res.status(404).json({ error: "Shared project not found" });

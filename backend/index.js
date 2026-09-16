@@ -8,7 +8,9 @@ dotenv.config();
 const connectDB = async () => {
   try {
     if (!process.env.MONGODB_URI) {
-      console.warn("⚠️  [DB] MONGODB_URI is not set in .env - Chat features will not work");
+      console.warn(
+        "⚠️  [DB] MONGODB_URI is not set in .env - Chat features will not work",
+      );
       return false;
     }
     await mongoose.connect(process.env.MONGODB_URI);
@@ -35,7 +37,7 @@ app.get("/health", (req, res) => {
  */
 app.get("/", (req, res) => {
   res.json({
-    message: "ZecoAI Backend v1.0",
+    message: "klyro Backend v1.0",
     status: "running",
     timestamp: new Date(),
   });
@@ -45,7 +47,7 @@ app.get("/", (req, res) => {
  */
 const PORT = process.env.PORT || 3000;
 const startServer = async () => {
-  console.log("\n🚀 Starting ZecoAI Backend Server...\n");
+  console.log("\n🚀 Starting klyro Backend Server...\n");
   // Connect to MongoDB first
   const dbConnected = await connectDB();
   if (!dbConnected) {
@@ -54,10 +56,18 @@ const startServer = async () => {
   app.listen(PORT, () => {
     console.log(`✓ Server running on http://localhost:${PORT}\n`);
     console.log("Environment Status:");
-    console.log(`  ✓ GROQ_API_KEY: ${process.env.GROQ_API_KEY ? "✓ Loaded" : "✗ Missing"}`);
-    console.log(`  ${process.env.JUDGE0_URL ? "✓" : "✗"} JUDGE0_URL: ${process.env.JUDGE0_URL || "http://localhost:2358 (default)"}`);
-    console.log(`  ${process.env.MONGODB_URI ? "✓" : "✗"} MONGODB_URI: ${process.env.MONGODB_URI ? "✓ Loaded" : "✗ Missing (Chat disabled)"}`);
-    console.log(`  ✓ MongoDB Status: ${mongoose.connection.readyState === 1 ? "✓ Connected" : "✗ Not Connected"}\n`);
+    console.log(
+      `  ✓ GROQ_API_KEY: ${process.env.GROQ_API_KEY ? "✓ Loaded" : "✗ Missing"}`,
+    );
+    console.log(
+      `  ${process.env.JUDGE0_URL ? "✓" : "✗"} JUDGE0_URL: ${process.env.JUDGE0_URL || "http://localhost:2358 (default)"}`,
+    );
+    console.log(
+      `  ${process.env.MONGODB_URI ? "✓" : "✗"} MONGODB_URI: ${process.env.MONGODB_URI ? "✓ Loaded" : "✗ Missing (Chat disabled)"}`,
+    );
+    console.log(
+      `  ✓ MongoDB Status: ${mongoose.connection.readyState === 1 ? "✓ Connected" : "✗ Not Connected"}\n`,
+    );
     console.log("Available Endpoints:");
     console.log(`  GET  http://localhost:${PORT}/health`);
     console.log(`  POST http://localhost:${PORT}/api/run-code`);

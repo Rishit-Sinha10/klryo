@@ -1,24 +1,35 @@
-import { useState } from "react"
-import { Code2, Settings, LogOut, ArrowLeft, Search, Command } from "lucide-react"
-import { UserAvatar } from "@clerk/clerk-react"
-import { Link, useLocation, useNavigate } from "react-router-dom"
-import CommandPalette from "../dashboard/CommandPalette"
-import useAuth from "../../hooks/useAuth"
-import { Button } from "@/components/ui/button"
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
-import favicon from "../../../public/favicon.svg"
+import { useState } from "react";
+import {
+  Code2,
+  Settings,
+  LogOut,
+  ArrowLeft,
+  Search,
+  Command,
+} from "lucide-react";
+import { UserAvatar } from "@clerk/clerk-react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import CommandPalette from "../dashboard/CommandPalette";
+import useAuth from "../../hooks/useAuth";
+import { Button } from "@/components/ui/button";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import favicon from "../../../public/favicon.svg";
 
 export default function Navbar() {
-  const location = useLocation()
-  const navigate = useNavigate()
-  const isEditor = location.pathname.startsWith("/editor/")
-  const { isSignedIn, logout } = useAuth()
-  const [cmdOpen, setCmdOpen] = useState(false)
+  const location = useLocation();
+  const navigate = useNavigate();
+  const isEditor = location.pathname.startsWith("/editor/");
+  const { isSignedIn, logout } = useAuth();
+  const [cmdOpen, setCmdOpen] = useState(false);
 
   const handleLogout = async () => {
-    await logout()
-    navigate("/")
-  }
+    await logout();
+    navigate("/");
+  };
 
   return (
     <>
@@ -44,11 +55,17 @@ export default function Navbar() {
               </Link>
             )}
             <Link to="/" className="flex items-center gap-2">
-              <div className="p-1 rounded-md" style={{ backgroundColor: "var(--accent-light)" }}>
-                <img src={favicon} alt="ZecoAI" width={16} height={16} />
+              <div
+                className="p-1 rounded-md"
+                style={{ backgroundColor: "var(--accent-light)" }}
+              >
+                <img src={favicon} alt="klyro" width={16} height={16} />
               </div>
-              <span className="font-semibold text-sm tracking-tight" style={{ color: "var(--text-primary)" }}>
-                ZecoAI
+              <span
+                className="font-semibold text-sm tracking-tight"
+                style={{ color: "var(--text-primary)" }}
+              >
+                klyro
               </span>
             </Link>
           </div>
@@ -60,7 +77,7 @@ export default function Navbar() {
               { label: "Projects", to: "/projects" },
               { label: "Templates", to: "/templates" },
             ].map((item) => {
-              const isActive = location.pathname === item.to
+              const isActive = location.pathname === item.to;
               return (
                 <Link
                   key={item.to}
@@ -73,7 +90,7 @@ export default function Navbar() {
                 >
                   {item.label}
                 </Link>
-              )
+              );
             })}
           </div>
 
@@ -91,14 +108,23 @@ export default function Navbar() {
                 >
                   <Search size={13} />
                   <span className="hidden lg:inline">Search</span>
-                  <kbd className="pointer-events-none inline-flex h-4 items-center gap-0.5 rounded border px-1 text-[10px] font-medium" style={{ borderColor: "var(--border)", color: "var(--text-tertiary)" }}>
+                  <kbd
+                    className="pointer-events-none inline-flex h-4 items-center gap-0.5 rounded border px-1 text-[10px] font-medium"
+                    style={{
+                      borderColor: "var(--border)",
+                      color: "var(--text-tertiary)",
+                    }}
+                  >
                     <Command size={9} />K
                   </kbd>
                 </Button>
               </TooltipTrigger>
               <TooltipContent>Command palette</TooltipContent>
             </Tooltip>
-            <div className="w-px h-4 mx-0.5" style={{ backgroundColor: "var(--border)" }} />
+            <div
+              className="w-px h-4 mx-0.5"
+              style={{ backgroundColor: "var(--border)" }}
+            />
             <Tooltip>
               <TooltipTrigger asChild>
                 <Link
@@ -129,7 +155,10 @@ export default function Navbar() {
               </Tooltip>
             )}
 
-            <div className="w-px h-4 mx-0.5" style={{ backgroundColor: "var(--border)" }} />
+            <div
+              className="w-px h-4 mx-0.5"
+              style={{ backgroundColor: "var(--border)" }}
+            />
 
             <UserAvatar
               appearance={{
@@ -144,5 +173,5 @@ export default function Navbar() {
 
       <CommandPalette open={cmdOpen} onOpenChange={setCmdOpen} />
     </>
-  )
+  );
 }

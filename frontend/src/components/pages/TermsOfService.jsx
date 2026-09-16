@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { ArrowLeft, FileText } from "lucide-react";
-import favicon from "../../../public/favicon.svg"
+import favicon from "../../../public/favicon.svg";
 export default function TermsOfService() {
   return (
     <div
@@ -17,16 +17,16 @@ export default function TermsOfService() {
             className="flex items-center gap-2 text-sm font-medium"
             style={{ color: "var(--text-secondary)" }}
           >
-            Back to ZecoAI
+            Back to klyro
           </Link>
           <Link to="/">
             <div className="flex items-center gap-2">
-              <img src={favicon} alt="ZecoAI" width={18} height={18} />
+              <img src={favicon} alt="klyro" width={18} height={18} />
               <span
                 className="text-sm font-semibold"
                 style={{ color: "var(--text-primary)" }}
               >
-                ZecoAI
+                klyro
               </span>
             </div>
           </Link>
@@ -51,9 +51,9 @@ export default function TermsOfService() {
               1. Acceptance of Terms
             </h2>
             <p>
-              By accessing or using ZecoAI ("the Service"), you agree to be
-              bound by these Terms of Service. If you do not agree, do not use
-              the Service.
+              By accessing or using klyro ("the Service"), you agree to be bound
+              by these Terms of Service. If you do not agree, do not use the
+              Service.
             </p>
           </section>
 
@@ -65,7 +65,7 @@ export default function TermsOfService() {
               2. Description of Service
             </h2>
             <p>
-              ZecoAI is a free, AI-powered web-based code editor that allows
+              klyro is a free, AI-powered web-based code editor that allows
               users to write, run, and debug code in 80+ programming languages.
               Features include AI code generation, autocomplete, debugging
               assistance, project management, and code sharing.
@@ -80,7 +80,7 @@ export default function TermsOfService() {
               3. User Accounts
             </h2>
             <ul className="list-disc pl-6 space-y-2">
-              <li>You must be at least 13 years old to use ZecoAI.</li>
+              <li>You must be at least 13 years old to use klyro.</li>
               <li>
                 You are responsible for maintaining the security of your
                 account.
@@ -130,9 +130,9 @@ export default function TermsOfService() {
               5. Intellectual Property
             </h2>
             <p>
-              You retain full ownership of any code you create using ZecoAI. The
+              You retain full ownership of any code you create using klyro. The
               Service itself, including its design, features, and AI
-              capabilities, is owned by ZecoAI and protected by intellectual
+              capabilities, is owned by klyro and protected by intellectual
               property laws.
             </p>
           </section>
@@ -147,7 +147,7 @@ export default function TermsOfService() {
             <p>
               AI-generated code and suggestions are provided "as is." You are
               responsible for reviewing, testing, and validating any
-              AI-generated code before use. ZecoAI does not guarantee the
+              AI-generated code before use. klyro does not guarantee the
               accuracy, security, or fitness of AI-generated content.
             </p>
           </section>
@@ -186,8 +186,8 @@ export default function TermsOfService() {
               8. Limitation of Liability
             </h2>
             <p>
-              ZecoAI is provided "as is" without warranties of any kind. We
-              shall not be liable for any indirect, incidental, or consequential
+              klyro is provided "as is" without warranties of any kind. We shall
+              not be liable for any indirect, incidental, or consequential
               damages arising from your use of the Service. Our total liability
               shall not exceed the amount you paid for the Service (which is $0
               for free users).
@@ -232,7 +232,7 @@ export default function TermsOfService() {
             <p>
               For questions about these Terms, contact us via{" "}
               <a
-                href="https://github.com/Ramesh1234-ai/ZecoAI/issues"
+                href="https://github.com/Ramesh1234-ai/klyro/issues"
                 target="_blank"
                 rel="noreferrer"
                 style={{ color: "var(--accent)" }}

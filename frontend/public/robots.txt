@@ -5,4 +5,4 @@ Disallow: /editor/
 Disallow: /settings/
 Disallow: /share/
 
-Sitemap: https://zecoai.vercel.app/sitemap.xml
+Sitemap: https://klyro.vercel.app/sitemap.xml
