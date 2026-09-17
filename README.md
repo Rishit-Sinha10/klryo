@@ -2,11 +2,10 @@
 # klyro
 
 > AI-powered code editor in your browser. Write, run, debug, and ship code across 80+ languages with AI assistance.
-> ![License](https://img.shields.io/badge/license-ISC-blue)
+> ![License](https://img.shields.io/badge/license-MIT-blue)
 > ![Status](https://img.shields.io/badge/status-v0.1-orange)
 
 ---
-
 ## Overview
 
 klyro is a full-stack web-based code editor that combines a VS Code-like editing experience with AI-driven code generation, real-time code execution, and persistent chat history.
